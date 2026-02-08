@@ -46,7 +46,6 @@ export default async function handler(req, res) {
     );
 
     // debug: log files shape (remove in production)
-    console.log('Parsed files:', Object.keys(files));
 
     const file = files.file || files.image;
     if (!file) return res.status(400).json({ error: 'No file uploaded (expected field "file" or "image")' });
