@@ -6,16 +6,16 @@ import { initializeApp, getApps, cert } from 'firebase-admin/app';
 if (!getApps().length) {
   initializeApp({
     credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+      projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+      privateKey: (process.env.FIREBASE_ADMIN_PRIVATE_KEY || '').replace(/\\n/g, '\n'),
     }),
   });
 }
 
 const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
+  process.env.SUPABASE_URL || '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 );
 
 export default async function handler(req, res) {
@@ -26,7 +26,11 @@ export default async function handler(req, res) {
     const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
     if (!token) return res.status(401).json({ error: 'Missing auth token' });
 
-    await getAuth().verifyIdToken(token); // any verified user allowed
+    try {
+      await getAuth().verifyIdToken(token);
+    } catch (e) {
+      return res.status(401).json({ error: 'Invalid or expired ID token' });
+    }
 
     const { path } = req.body;
     if (!path) return res.status(400).json({ error: 'Missing file path' });

@@ -302,7 +302,7 @@ export default function TourManager() {
                 ></textarea>
               </div>
 
-              <div className="md:col-span-2">
+              { <div className="md:col-span-2">
                 <label className="block text-brand-dark font-semibold mb-2">
                   Tour Image
                 </label>
@@ -317,7 +317,7 @@ export default function TourManager() {
                     <img src={formData.imageUrl} alt="Current" className="h-32 rounded-lg" />
                   </div>
                 )}
-              </div>
+              </div> }
             </div>
 
             <div className="flex gap-4 mt-6">
@@ -365,7 +365,7 @@ export default function TourManager() {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-2 right-2 bg-brand-orange text-white px-3 py-1 rounded-full font-semibold">
-                    ${tour.price}
+                    Kes.{tour.price}
                   </div>
                 </div>
 
@@ -389,7 +389,7 @@ export default function TourManager() {
                       Edit
                     </button>
                     <button
-                      onClick={() => handleDelete(tour.id)}
+                      onClick={() => handleDelete(tour)}
                       className="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 rounded-lg transition-colors"
                     >
                       Delete
